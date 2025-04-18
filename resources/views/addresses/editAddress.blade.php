@@ -45,7 +45,7 @@
 
             <div class="mb-3">
                 <label for="cep" class="form-label">CEP</label>
-                <input type="text" name="cep" id="cep" class="form-control" maxlength="8" required value="{{ $address->cep }}" onblur="buscarEndereco()">
+                <input type="text" name="cep" id="cep" class="form-control" maxlength="8" required value="{{ $address->cep }}" onblur="buscarEndereco(this.value)">
             </div>
 
             <div class="mb-3">
@@ -91,6 +91,37 @@
     </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.min.js"></script>
-@vite(['resources/js/app.js'])
+<script>
+    function buscarEndereco(cep) {
+        // Exibe o loader enquanto busca o endereço
+        document.getElementById('cep-loader').style.display = 'block';
+
+        // Limpa o CEP
+        cep = cep.replace(/\D/g, '');
+
+        // Faz a requisição para a API ViaCEP
+        fetch(`https://viacep.com.br/ws/${cep}/json/`)
+            .then(response => response.json())
+            .then(data => {
+                // Esconde o loader
+                document.getElementById('cep-loader').style.display = 'none';
+
+                // Verifica se o CEP é válido
+                if (data.erro) {
+                    alert('CEP não encontrado!');
+                } else {
+                    // Preenche os campos do formulário com os dados do endereço
+                    document.getElementById('street').value = data.logradouro;
+                    document.getElementById('neighborhood').value = data.bairro;
+                    document.getElementById('city').value = data.localidade;
+                    document.getElementById('state').value = data.uf;
+                }
+            })
+            .catch(error => {
+                document.getElementById('cep-loader').style.display = 'none';
+                alert('Erro ao buscar o endereço.');
+            });
+    }
+</script>
 </body>
 </html>
