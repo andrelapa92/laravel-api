@@ -9,8 +9,9 @@ class HealthCheckTest extends TestCase
 {
     public function test_homepage_is_accessible(): void
     {
-        $response = $this->get('/users');
+        $response = $this->get('/');
 
-        $response->assertStatus(200);
+        $response->assertStatus(302); // Redireciona para /users
+        $response->assertRedirect('/users');
     }
 }
