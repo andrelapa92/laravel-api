@@ -28,8 +28,8 @@ jobs:
           php artisan key:generate
           touch database/database.sqlite
           php artisan migrate --env=testing
-        working-directory: ./src  # ajuste se sua pasta Laravel for diferente
+        working-directory: ./  # ajuste se sua pasta Laravel for diferente
 
       - name: Rodar testes
         run: php artisan test
-        working-directory: ./src
+        working-directory: ./
