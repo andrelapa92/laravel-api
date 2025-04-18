@@ -1,26 +1,37 @@
 <?php
 
+namespace App\Http\Middleware;
+
 use Illuminate\Http\Request;
+use Illuminate\Foundation\Http\Middleware\TrustProxies as Middleware;
+use Symfony\Component\HttpFoundation\Request as SymfonyRequest;
 
 class TrustProxies extends Middleware
 {
     /**
      * The trusted proxies for this application.
      *
-     * @var array
+     * @var array|string
      */
-    protected $proxies = '*'; // Aceita todas as conexões externas
+    protected $proxies = '*'; // Pode ser configurado de acordo com a sua necessidade
 
     /**
      * The headers that should be used to detect proxies.
      *
-     * @var string
+     * @var int
      */
-    protected $headers = Request::HEADER_X_FORWARDED_ALL;
+    protected $headers = SymfonyRequest::HEADER_X_FORWARDED_ALL;
 
-    public function handle($request, \Closure $next)
+    /**
+     * Handle an incoming request.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \Closure  $next
+     * @return mixed
+     */
+    public function handle(Request $request, \Closure $next)
     {
-        // Verifica se a aplicação está sendo acessada via HTTP e redireciona para HTTPS
+        // Verifica se é produção e redireciona para HTTPS
         if (env('APP_ENV') === 'production' && !$request->secure()) {
             return redirect()->secure($request->getRequestUri());
         }
