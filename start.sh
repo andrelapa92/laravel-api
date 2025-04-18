@@ -1,5 +1,9 @@
 #!/bin/bash
 
+# Espera o banco de dados subir
+echo "Aguardando o banco subir..."
+sleep 10
+
 set -e  # Para o script se qualquer comando falhar
 
 echo "🔧 Instalando dependências PHP com Composer..."
