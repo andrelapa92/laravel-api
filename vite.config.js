@@ -2,26 +2,14 @@ import { defineConfig } from 'vite';
 import laravel from 'laravel-vite-plugin';
 
 export default defineConfig({
-    server: {
-        host: '0.0.0.0',
-        port: 5173,
-        strictPort: true,
-        watch: {
-            usePolling: true,
-        },
-    },
-    build: {
-        manifest: true,
-        outDir: 'public/build',
-        rollupOptions: {
-            input: 'resources/js/app.js',
-        },
-    },
     plugins: [
         laravel({
             input: ['resources/js/app.js'],
             refresh: true,
+            publicDirectory: 'public',
         }),
     ],
-    base: '/build/',
+    build: {
+        assetsInlineLimit: 0,
+    },
 });
